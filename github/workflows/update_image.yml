@@ -1,0 +1,36 @@
+name: Update Telegram Image
+
+on:
+  schedule:
+    # Cron формат: минута час день месяц день_недели
+    # */10 означает "каждые 10 минут"
+    # ВНИМАНИЕ: GitHub Actions не гарантирует точность до секунды, задержки могут быть 5-15 мин.
+    - cron: "*/10 * * * *"
+  
+  # Возможность запустить вручную через кнопку в Actions
+  workflow_dispatch:
+
+jobs:
+  update-post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5 # Защита от зависания
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip' # Кэширует зависимости, ускоряет запуск
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          MESSAGE_ID: ${{ secrets.MESSAGE_ID }}
+        run: python main.py
