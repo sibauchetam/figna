@@ -38,7 +38,6 @@ def update_telegram_photo():
     media_payload = {
         "type": "photo",
         "media": "attach://image_upload",
-        "caption": f"Картинка обновлена: {selected_image}" # Опционально: можно убрать или менять текст
     }
 
     with open(image_path, "rb") as img_file:
